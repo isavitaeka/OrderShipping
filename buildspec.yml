@@ -1,0 +1,18 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+    commands:
+      - echo "Installing dependencies..."
+      - pip install -r requirements.txt -t lib
+  build:
+    commands:
+      - echo "Zipping deployment package..."
+      - zip -r deployment_package.zip  .
+  post_build:
+    commands:
+      - echo "Updating   lambda Function..."
+      - aws lambda update-function-code --function-name pyShipOrderLdFunction --zip-file fileb://deployment_package.zip
+      - echo "DONE!!"
+      
